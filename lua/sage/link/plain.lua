@@ -5,8 +5,13 @@ function plain.set_link()
     local word = utils.get_word()
     local line = utils.get_line()
     local uri = utils.prompt("Uri: ")
-    line = line:gsub(word, string.format("[%s](%s)", word, uri))
-    vim.fn.setline(".", line)
+    local word_start = utils.word_nearby(line, word)
+
+    local editable = { line:sub(1, word_start), line:sub(word_start + 1 + #word) }
+
+    local link = string.format("[%s](%s)", word, uri)
+    local modified_line = editable[1] .. link .. editable[2]
+    vim.fn.setline(".", modified_line)
 end
 
 function plain.set_link_range()

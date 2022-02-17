@@ -29,4 +29,23 @@ function utils.prompt(prompt)
     return vim.fn.input(prompt)
 end
 
+function utils.word_nearby(line, word)
+    local current_pos = vim.fn.col(".")
+    local without_word = vim.split(line, word)
+    local modified = line:gsub(word, "")
+    local occurence = (#line - #modified) / #word
+
+    local len = 0
+    for idx, unit in ipairs(without_word) do
+        if idx == #without_word then break end
+        if len < current_pos then
+            len = len + #unit + #word
+        elseif len >= current_pos then
+            break
+        end
+    end
+
+    return len - #word
+end
+
 return utils
