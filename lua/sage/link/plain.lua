@@ -3,6 +3,7 @@ local utils = require("sage.utils")
 
 function plain.set_link()
     local uri = utils.prompt("Uri: ")
+    local word = utils.get_word()
     local link = string.format("[%s](%s)", word, uri)
     utils.modify_line(link)
 end
