@@ -25,8 +25,13 @@ function utils.get_line()
     return vim.fn.getline(".")
 end
 
-function utils.prompt(prompt)
-    return vim.fn.input(prompt)
+function utils.prompt(prompt, funcname)
+    if funcname then
+        local completion = "custom,"..funcname
+        return vim.fn.input(prompt, "", completion)
+    else
+        return vim.fn.input(prompt)
+    end
 end
 
 function utils.word_nearby(line, word)
@@ -46,6 +51,34 @@ function utils.word_nearby(line, word)
     end
 
     return len - #word
+end
+
+function utils.modify_line(link)
+    local word = utils.get_word()
+    local line = utils.get_line()
+    local word_start = utils.word_nearby(line, word)
+    local editable = { line:sub(1, word_start), line:sub(word_start + 1 + #word) }
+    local modified_line = editable[1]..link..editable[2]
+    vim.fn.setline(".", modified_line)
+end
+
+function utils.remove_chars(str, chars)
+    return utils.replace_chars(str, chars, "")
+end
+
+function utils.replace_chars(str, chars, replacement)
+    chars = vim.split(chars, "")
+    for _, char in ipairs(chars) do
+        str = str:gsub(vim.pesc(char), replacement)
+    end
+    return str
+end
+
+function utils.header_format(raw)
+    local preformatted = raw:gsub("# ", "")
+    local remove = "#####!@$^&*()+=~`'\":;,.?№{}[]|/"
+    local format_removed = utils.remove_chars(preformatted, remove)
+    return utils.replace_chars(format_removed, " ", "-")
 end
 
 return utils

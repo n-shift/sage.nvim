@@ -8,7 +8,7 @@ end
 
 function cli.completion(cmd)
     if string.find(cmd, "SageLink") then
-        return "plain\nimage"
+        return "plain\nimage\nheading"
     end
 end
 

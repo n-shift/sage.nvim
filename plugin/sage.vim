@@ -1,6 +1,9 @@
-function! ArgCompletion(A, L, P)
+function! SageCompletion(A, L, P)
     return luaeval("require('sage.cli').completion(_A)", a:L)
 endfunction
-command! -bang -nargs=1 -complete=custom,ArgCompletion SageLink :lua require("sage.cli").handle("l", "<args>")
-command! -bang -nargs=1 -complete=custom,ArgCompletion SageLinkRange :lua require("sage.cli").handle("l", "<args>")
+function! SageHeadingCompletion(A, L, P)
+    return luaeval("require('sage.link.heading').completion()")
+endfunction
+command! -bang -nargs=1 -complete=custom,SageCompletion SageLink :lua require("sage.cli").handle("l", "<args>")
+command! -bang -nargs=1 -complete=custom,SageCompletion SageLinkRange :lua require("sage.cli").handle("l", "<args>")
 
