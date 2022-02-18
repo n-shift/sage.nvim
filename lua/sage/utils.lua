@@ -74,11 +74,22 @@ function utils.replace_chars(str, chars, replacement)
     return str
 end
 
+function utils.header_content(raw)
+    local heading_char_count = 0
+    for idx = 1, #raw do
+        if raw:sub(idx, idx) ~= "#" then
+            break
+        end
+        heading_char_count = heading_char_count + 1
+    end
+    return { raw:sub(heading_char_count + 2), heading_char_count }
+end
+
 function utils.header_format(raw)
-    local preformatted = raw:gsub("# ", "")
-    local remove = "#####!@$^&*()+=~`'\":;,.?№{}[]|/"
+    local preformatted = utils.header_content(raw)[1]
+    local remove = "!@$^&*()+=~`'\":;,.?№{}[]|/"
     local format_removed = utils.remove_chars(preformatted, remove)
-    return utils.replace_chars(format_removed, " ", "-")
+    return utils.replace_chars(format_removed, " ", "-"):lower()
 end
 
 return utils
