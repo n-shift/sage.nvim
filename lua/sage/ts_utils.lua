@@ -1,16 +1,16 @@
 local ts_utils = {}
 
-function ts_utils.get_named_node_pos(type)
+function ts_utils.get_named_node(type)
     local result = {}
     vim.treesitter.get_parser(0, "markdown"):for_each_tree(function(tree)
         local root = tree:root()
         local function lower(node)
             for child, _ in node:iter_children() do
                 if child:type() == type then
-                    table.insert(result, {child:range()})
+                    table.insert(result, child)
                 else
                     for _, node_child in ipairs(lower(child) or {}) do
-                        table.insert(result, {node_child:range()})
+                        table.insert(result, node_child)
                     end
                 end
             end
@@ -18,6 +18,14 @@ function ts_utils.get_named_node_pos(type)
         lower(root)
     end)
     return result
+end
+
+function ts_utils.get_named_node_pos(type)
+    local nodes = ts_utils.get_named_node(type)
+    for idx, node in ipairs(nodes) do
+        nodes[idx] = { node:range() }
+    end
+    return nodes
 end
 
 -- row1 col1 row2 col2
