@@ -8,3 +8,4 @@ endfunction
 command! -bang -nargs=1 -complete=custom,SageCompletion SageLink :lua require("sage.cli").handle("l", "<args>")
 command! -bang -nargs=1 -complete=custom,SageCompletion SageLinkRange :lua require("sage.cli").handle("l", "<args>")
 command! -bang -nargs=0 SageToc :lua require("sage.toc")()
+command! -bang -nargs=1 -complete=custom,SageCompletion SageTable :lua require("sage.cli").handle("t", "<args>")
